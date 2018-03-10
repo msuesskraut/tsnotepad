@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { evaluate } from './app';
 export default {
   name: 'test',
   data () {
@@ -30,7 +31,7 @@ export default {
     execute : function (event) {
       this.contents.push({
         command : this.command,
-        result : "Result: " + this.command
+        result : evaluate(this.command)
       });
       this.command = '';
     }
