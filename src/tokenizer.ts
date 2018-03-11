@@ -8,6 +8,10 @@ export class TokenLocation {
     constructor(off : number) {
         this.offset = off;
     }
+
+    toString(): string {
+        return `offset: ${this.offset}`
+    }
 }
 
 export class TokenError {
@@ -29,20 +33,15 @@ export class Token {
     readonly value : any;
     readonly location : TokenLocation;
 
-    constructor(k : TokenKind, txt : string, loc : TokenLocation) {
+    constructor(k : TokenKind, txt : string, val : any, loc : TokenLocation) {
         this.kind = k;
         this.text = txt;
         this.location = loc;
-        if (this.kind == TokenKind.Operator) {
-            this.value = this.text;
-        }
-        else if (this.kind === TokenKind.Number) {
-            this.value = parseInt(this.text);
-        }
+        this.value = val;
     }
 
-    AsString() : string {
-        return `${this.kind} (${this.text}) at ${this.location}`;
+    toString() : string {
+        return `${TokenKind[this.kind]}; text: ${this.text}; value: ${this.value} at ${this.location}`;
     }
 }
 
@@ -74,7 +73,7 @@ export class Tokennizer {
     NextToken() : Token {
         let c = this.text[this.loc];
         if (this.IsOperator(c)) {
-            let t = new Token(TokenKind.Operator, c, new TokenLocation(this.loc));
+            let t = new Token(TokenKind.Operator, c, c, new TokenLocation(this.loc));
             this.AdvanceChar();
             return t;
         }
@@ -86,7 +85,7 @@ export class Tokennizer {
                 this.AdvanceChar();
                 c = this.text[this.loc];
             }
-            let t = new Token(TokenKind.Number, strNum, new TokenLocation(l));
+            let t = new Token(TokenKind.Number, strNum, parseInt(strNum), new TokenLocation(l));
             return t;
         }
         else {
