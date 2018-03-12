@@ -4,10 +4,7 @@ export enum TokenKind {
 }
 
 export class TokenLocation {
-    readonly offset : number;
-    constructor(off : number) {
-        this.offset = off;
-    }
+    constructor(public readonly offset : number) { }
 
     toString(): string {
         return `offset: ${this.offset}`
@@ -15,12 +12,10 @@ export class TokenLocation {
 }
 
 export class TokenError {
-    readonly message : string;
-    readonly location : TokenLocation;
-    constructor(msg: string, loc : TokenLocation) {
-        this.message = msg;
-        this.location = loc;
-    }
+    constructor(
+        public readonly message: string,
+        public readonly location : TokenLocation)
+    { }
 
     GetFullErrorMessage() : string {
         return `Error at ${this.location.offset}: ${this.message}`;
@@ -28,17 +23,12 @@ export class TokenError {
 }
 
 export class Token {
-    readonly kind : TokenKind;
-    readonly text : string;
-    readonly value : any;
-    readonly location : TokenLocation;
-
-    constructor(k : TokenKind, txt : string, val : any, loc : TokenLocation) {
-        this.kind = k;
-        this.text = txt;
-        this.location = loc;
-        this.value = val;
-    }
+    constructor(
+        public readonly kind : TokenKind,
+        public readonly text : string,
+        public readonly value : any,
+        public readonly location : TokenLocation)
+    { }
 
     toString() : string {
         return `${TokenKind[this.kind]}; text: ${this.text}; value: ${this.value} at ${this.location}`;
