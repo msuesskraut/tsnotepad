@@ -1,7 +1,7 @@
 {
-  "name": "electron",
-  "productName": "electron",
-  "version": "1.0.0",
+  "name": "notepad",
+  "productName": "notepad",
+  "version": "0.0.1",
   "description": "My Electron application description",
   "main": "src/index.ts",
   "scripts": {
@@ -13,21 +13,14 @@
     "test": "jasmine-ts \"./spec/**/*.spec.ts\""
   },
   "keywords": [],
-  "author": "Martin",
+  "author": "Martin Suesskraut",
   "license": "MIT",
   "config": {
     "forge": {
       "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
+        "win32": ["squirrel"],
+        "darwin": ["zip"],
+        "linux": ["deb", "rpm"]
       },
       "electronPackagerConfig": {
         "packageManager": "npm"
@@ -43,7 +36,7 @@
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "electron"
+        "name": "notepad"
       }
     }
   },
