@@ -63,20 +63,26 @@ export class Tokenizer {
   }
 
   NextToken(): Token {
-    let c = this.text[this.loc];
+    const c = this.text[this.loc];
     if (this.IsOperator(c)) {
-      let t = new Token(TokenKind.Operator, c, c, new TokenLocation(this.loc));
+      const t = new Token(
+        TokenKind.Operator,
+        c,
+        c,
+        new TokenLocation(this.loc)
+      );
       this.AdvanceChar();
       return t;
     } else if (this.IsDigit(c)) {
-      let l = this.loc;
+      const l = this.loc;
+      let ch = c;
       let strNum = "";
-      while (this.IsDigit(c)) {
-        strNum += c;
+      while (this.IsDigit(ch)) {
+        strNum += ch;
         this.AdvanceChar();
-        c = this.text[this.loc];
+        ch = this.text[this.loc];
       }
-      let t = new Token(
+      const t = new Token(
         TokenKind.Number,
         strNum,
         parseInt(strNum),
