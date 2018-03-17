@@ -119,11 +119,23 @@ describe("Tokenizer", function() {
     expect(tok).toEqual(new Token(TokenKind.EOF, "", "", new TokenLocation(4)));
   });
 
-  it("skip whitespace before a token", function() {
+  it("should skip whitespace before a token", function() {
     let t = new Tokenizer("  234   ");
-    let tok = t.GetNextToken();
+    const tok = t.GetNextToken();
     expect(tok).toEqual(
       new Token(TokenKind.Number, "234", 234, new TokenLocation(2))
     );
+  });
+
+  it("should parse (", () => {
+    let t = new Tokenizer("(");
+    const tok = t.GetNextToken();
+    expect(tok.kind).toEqual(TokenKind.ParensOpen);
+  });
+
+  it("should parse )", () => {
+    let t = new Tokenizer(")");
+    const tok = t.GetNextToken();
+    expect(tok.kind).toEqual(TokenKind.ParensClose);
   });
 });

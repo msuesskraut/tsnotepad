@@ -2,6 +2,8 @@ export enum TokenKind {
   Whitespace,
   Number,
   Operator,
+  ParensOpen,
+  ParensClose,
   EOF
 }
 
@@ -73,10 +75,19 @@ function EOFParser(text: string, off: number): Token | null {
 let WhitespaceParser = RegExParser("[ \t\n\r]+", TokenKind.Whitespace, id);
 let NumberParser = RegExParser("[0-9]+", TokenKind.Number, parseInt);
 let OperatorParser = RegExParser("[\\+\\-\\*\\/]", TokenKind.Operator, id);
+let ParensOpenParser = RegExParser("\\(", TokenKind.ParensOpen, id);
+let ParensCloseParser = RegExParser("\\)", TokenKind.ParensClose, id);
 
 export class Tokenizer {
   private loc: number;
-  static parsers = [EOFParser, WhitespaceParser, NumberParser, OperatorParser];
+  static parsers = [
+    EOFParser,
+    WhitespaceParser,
+    NumberParser,
+    OperatorParser,
+    ParensOpenParser,
+    ParensCloseParser
+  ];
 
   constructor(
     private readonly text: string,
