@@ -1,11 +1,14 @@
 <template>
   <div>
     <h2>Welcome in {{title}}</h2>
-    <div v-for="item in contents">
+    <div v-for="item in contents" :key="item.id">
       <span class="prompt">{{prompt}}</span>
       <input class="used" type="text" v-bind:value="item.command" readonly />
       <div>
-        {{item.result}}
+        <div v-for="tok in item.result">
+          {{tok}}
+          <br/>
+        </div>
       </div>
     </div>
     <div>
@@ -16,25 +19,28 @@
 </template>
 
 <script>
-import { evaluate } from './app';
+import { evaluate } from "./app";
 export default {
-  name: 'test',
-  data () {
+  name: "test",
+  data() {
     return {
-       title: '',
-       prompt: '>>',
-       command: '',
-       contents : []
-    }
+      title: "",
+      prompt: ">>",
+      command: "",
+      contents: [],
+      next_id: 0
+    };
   },
-  methods : {
-    execute : function (event) {
+  methods: {
+    execute: function(event) {
       this.contents.push({
-        command : this.command,
-        result : evaluate(this.command)
+        command: this.command,
+        result: evaluate(this.command),
+        id: this.next_id
       });
-      this.command = '';
+      ++this.next_id;
+      this.command = "";
     }
   }
-}
+};
 </script>
