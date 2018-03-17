@@ -1,6 +1,8 @@
 export enum TokenKind {
+  Whitespace,
   Number,
-  Operator
+  Operator,
+  EOF
 }
 
 export class TokenLocation {
@@ -37,60 +39,72 @@ export class Token {
   }
 }
 
-export class Tokenizer {
-  private text: string;
-  private loc: number;
+type TokenParser = (text: string, off: number) => Token | null;
+type ConvertValue = (text: string) => any;
 
-  constructor(txt: string) {
-    this.text = txt;
+function id(x: string): string {
+  return x;
+}
+
+function RegExParser(
+  r: string,
+  tk: TokenKind,
+  convert: ConvertValue
+): TokenParser {
+  const regEx = new RegExp("^" + r);
+  return function(text: string, off: number): Token | null {
+    const m = regEx.exec(text);
+    if (m === null) {
+      return null;
+    } else {
+      const t = m[0];
+      return new Token(tk, t, convert(t), new TokenLocation(off));
+    }
+  };
+}
+
+function EOFParser(text: string, off: number): Token | null {
+  if (0 === text.length) {
+    return new Token(TokenKind.EOF, "", "", new TokenLocation(off));
+  } else {
+    return null;
+  }
+}
+let WhitespaceParser = RegExParser("[ \t\n\r]+", TokenKind.Whitespace, id);
+let NumberParser = RegExParser("[0-9]+", TokenKind.Number, parseInt);
+let OperatorParser = RegExParser("[\\+\\-\\*\\/]", TokenKind.Operator, id);
+
+export class Tokenizer {
+  private loc: number;
+  static parsers = [EOFParser, WhitespaceParser, NumberParser, OperatorParser];
+
+  constructor(
+    private readonly text: string,
+    private readonly skipWhitespace: boolean = true
+  ) {
     this.loc = 0;
   }
 
-  private AdvanceChar(): void {
-    this.loc += 1;
-  }
-
-  private IsOperator(c: string): boolean {
-    return ["+", "-", "*", "/"].indexOf(c) >= 0;
-  }
-
-  private IsDigit(c: string): boolean {
-    return c >= "0" && c <= "9";
-  }
-
-  IsFinished(): boolean {
-    return this.loc === this.text.length;
-  }
-
-  NextToken(): Token {
-    const c = this.text[this.loc];
-    if (this.IsOperator(c)) {
-      const t = new Token(
-        TokenKind.Operator,
-        c,
-        c,
-        new TokenLocation(this.loc)
-      );
-      this.AdvanceChar();
-      return t;
-    } else if (this.IsDigit(c)) {
-      const l = this.loc;
-      let ch = c;
-      let strNum = "";
-      while (this.IsDigit(ch)) {
-        strNum += ch;
-        this.AdvanceChar();
-        ch = this.text[this.loc];
+  GetNextToken(): Token {
+    let retry = false;
+    do {
+      retry = false;
+      for (let p of Tokenizer.parsers) {
+        let t = p(this.text.substr(this.loc), this.loc);
+        if (t != null) {
+          this.loc += t.text.length;
+          if (this.skipWhitespace && TokenKind.Whitespace == t.kind) {
+            retry = true;
+            break;
+          }
+          return t;
+        }
       }
-      const t = new Token(
-        TokenKind.Number,
-        strNum,
-        parseInt(strNum),
-        new TokenLocation(l)
-      );
-      return t;
-    } else {
-      throw new TokenError(`Unknown char ${c}`, new TokenLocation(this.loc));
-    }
+    } while (retry);
+
+    throw new TokenError(
+      `Unknown char ${this.text[this.loc]}`,
+      new TokenLocation(this.loc)
+    );
   }
 }

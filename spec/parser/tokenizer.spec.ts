@@ -45,19 +45,14 @@ describe("Token", function() {
 });
 
 describe("Tokenizer", function() {
-  it("Should return IsFinished for empty string", function() {
-    let t = new Tokenizer("");
-    expect(t.IsFinished()).toBeTruthy();
-  });
-
   it("Should throw when calling NextToken on a finished Tokenizer", function() {
     let t = new Tokenizer("");
-    expect(t.NextToken).toThrow();
+    expect(t.GetNextToken).toThrow();
   });
 
   it("should parse operator +", function() {
     let t = new Tokenizer("+");
-    const tok = t.NextToken();
+    const tok = t.GetNextToken();
     expect(tok).toEqual(
       new Token(TokenKind.Operator, "+", "+", new TokenLocation(0))
     );
@@ -66,7 +61,7 @@ describe("Tokenizer", function() {
   it("should parse all operators", function() {
     ["-", "*", "/"].forEach(op => {
       let t = new Tokenizer(op);
-      const tok = t.NextToken();
+      const tok = t.GetNextToken();
       expect(tok).toEqual(
         new Token(TokenKind.Operator, op, op, new TokenLocation(0))
       );
@@ -74,14 +69,14 @@ describe("Tokenizer", function() {
   });
 
   it("should parse an single digit integer", function() {
-    const tok = new Tokenizer("3").NextToken();
+    const tok = new Tokenizer("3").GetNextToken();
     expect(tok).toEqual(
       new Token(TokenKind.Number, "3", 3, new TokenLocation(0))
     );
   });
 
   it("should parse an multi digit integers", function() {
-    const tok = new Tokenizer("143").NextToken();
+    const tok = new Tokenizer("143").GetNextToken();
     expect(tok).toEqual(
       new Token(TokenKind.Number, "143", 143, new TokenLocation(0))
     );
@@ -90,13 +85,45 @@ describe("Tokenizer", function() {
   it("should parse multiple tokens", function() {
     let t = new Tokenizer("12+34");
     let toks: Array<Token> = [];
-    while (!t.IsFinished()) {
-      toks.push(t.NextToken());
+    let isFinished = false;
+    while (!isFinished) {
+      const tok = t.GetNextToken();
+      isFinished = tok.kind == TokenKind.EOF;
+      toks.push(tok);
     }
     expect(toks).toEqual([
       new Token(TokenKind.Number, "12", 12, new TokenLocation(0)),
       new Token(TokenKind.Operator, "+", "+", new TokenLocation(2)),
-      new Token(TokenKind.Number, "34", 34, new TokenLocation(3))
+      new Token(TokenKind.Number, "34", 34, new TokenLocation(3)),
+      new Token(TokenKind.EOF, "", "", new TokenLocation(5))
     ]);
+  });
+
+  it("Should parse whitespace", () => {
+    let t = new Tokenizer("   ", false);
+    const tok = t.GetNextToken();
+    expect(tok).toEqual(
+      new Token(TokenKind.Whitespace, "   ", "   ", new TokenLocation(0))
+    );
+  });
+
+  it("should parse EOF", () => {
+    let t = new Tokenizer("");
+    const tok = t.GetNextToken();
+    expect(tok).toEqual(new Token(TokenKind.EOF, "", "", new TokenLocation(0)));
+  });
+
+  it("should parse EOF with whitespace", () => {
+    let t = new Tokenizer(" \n  ");
+    const tok = t.GetNextToken();
+    expect(tok).toEqual(new Token(TokenKind.EOF, "", "", new TokenLocation(4)));
+  });
+
+  it("skip whitespace before a token", function() {
+    let t = new Tokenizer("  234   ");
+    let tok = t.GetNextToken();
+    expect(tok).toEqual(
+      new Token(TokenKind.Number, "234", 234, new TokenLocation(2))
+    );
   });
 });
