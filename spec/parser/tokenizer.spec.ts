@@ -54,18 +54,24 @@ describe("Tokenizer", function() {
     let t = new Tokenizer("+");
     const tok = t.GetNextToken();
     expect(tok).toEqual(
-      new Token(TokenKind.Operator, "+", "+", new TokenLocation(0))
+      new Token(TokenKind.Plus, "+", "+", new TokenLocation(0))
     );
   });
 
   it("should parse all operators", function() {
-    ["-", "*", "/"].forEach(op => {
-      let t = new Tokenizer(op);
-      const tok = t.GetNextToken();
-      expect(tok).toEqual(
-        new Token(TokenKind.Operator, op, op, new TokenLocation(0))
-      );
-    });
+    let t = new Tokenizer("-*/%");
+    expect(t.GetNextToken()).toEqual(
+      new Token(TokenKind.Minus, "-", "-", new TokenLocation(0))
+    );
+    expect(t.GetNextToken()).toEqual(
+      new Token(TokenKind.Times, "*", "*", new TokenLocation(1))
+    );
+    expect(t.GetNextToken()).toEqual(
+      new Token(TokenKind.Divide, "/", "/", new TokenLocation(2))
+    );
+    expect(t.GetNextToken()).toEqual(
+      new Token(TokenKind.Rem, "%", "%", new TokenLocation(3))
+    );
   });
 
   it("should parse an single digit integer", function() {
@@ -93,7 +99,7 @@ describe("Tokenizer", function() {
     }
     expect(toks).toEqual([
       new Token(TokenKind.Number, "12", 12, new TokenLocation(0)),
-      new Token(TokenKind.Operator, "+", "+", new TokenLocation(2)),
+      new Token(TokenKind.Plus, "+", "+", new TokenLocation(2)),
       new Token(TokenKind.Number, "34", 34, new TokenLocation(3)),
       new Token(TokenKind.EOF, "", "", new TokenLocation(5))
     ]);
