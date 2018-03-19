@@ -17,3 +17,8 @@ class Printer extends ast.Visitor<string> {
     return `${TokenKind[op.token.kind]}(${left_arg}, ${right_arg})`;
   }
 }
+
+export function print(n: ast.Node): string {
+  let p = new Printer();
+  return n.accept(p);
+}
