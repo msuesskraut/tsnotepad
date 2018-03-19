@@ -4,8 +4,11 @@
     <div v-for="item in contents" :key="item.id">
       <span class="prompt">{{prompt}}</span>
       <input class="used" type="text" v-bind:value="item.command" readonly />
-      <div>
-        <div v-for="tok in item.result">
+      <div v-if="item.result.isError" class="error">
+        Error: {{item.result.text[0]}}
+      </div>
+      <div v-else>
+        <div v-for="tok in item.result.text">
           {{tok}}
           <br/>
         </div>

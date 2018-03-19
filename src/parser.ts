@@ -6,6 +6,10 @@ export class ParserError {
     public readonly location: TokenLocation,
     public readonly message: string
   ) {}
+
+  toString(): string {
+    return `${this.message} at ${this.location}`;
+  }
 }
 
 export class Parser {

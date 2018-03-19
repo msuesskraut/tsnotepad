@@ -1,6 +1,9 @@
 input.used {
-    border-width: 0
+  border-width: 0;
 }
 input.current {
-    border-width: 0
+  border-width: 0;
+}
+div.error {
+  color: red;
 }
