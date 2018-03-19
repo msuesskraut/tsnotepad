@@ -1,5 +1,5 @@
 import * as ast from "../../src/ast";
-import { TokenKind, TokenLocation, Token } from "../../src/tokenizer";
+import * as tok from "../helpers/token";
 
 describe("ast.Vistor", () => {
   class DummyVisitor extends ast.Visitor<void> {
@@ -8,17 +8,9 @@ describe("ast.Vistor", () => {
     visitBinOp(op: ast.BinOp) {}
   }
 
-  function tok(tk: TokenKind, val: any): Token {
-    return new Token(tk, `${val}`, val, new TokenLocation(0));
-  }
-
-  function numTok(v: number): Token {
-    return tok(TokenKind.Number, v);
-  }
-
-  const num1 = new ast.Number(numTok(23));
-  const num2 = new ast.Number(numTok(12));
-  const num3 = new ast.Number(numTok(34));
+  const num1 = new ast.Number(tok.num(23));
+  const num2 = new ast.Number(tok.num(12));
+  const num3 = new ast.Number(tok.num(34));
 
   it("should visit numbers", () => {
     let v = new DummyVisitor();
@@ -28,7 +20,7 @@ describe("ast.Vistor", () => {
   });
 
   it("should visit unary ops", () => {
-    const op = new ast.UnOp(tok(TokenKind.Minus, "-"), num2);
+    const op = new ast.UnOp(tok.tok(tok.TokenKind.Minus, "-"), num2);
     let v = new DummyVisitor();
     spyOn(v, "visitUnOp");
     op.accept(v);
@@ -36,7 +28,7 @@ describe("ast.Vistor", () => {
   });
 
   it("should visit binary ops", () => {
-    const op = new ast.BinOp(tok(TokenKind.Times, "*"), num2, num3);
+    const op = new ast.BinOp(tok.tok(tok.TokenKind.Times, "*"), num2, num3);
     let v = new DummyVisitor();
     spyOn(v, "visitBinOp");
     op.accept(v);

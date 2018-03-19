@@ -122,7 +122,7 @@ export class Parser {
     return this.parseAdd();
   }
 
-  parse(): ast.Node {
+  private parse(): ast.Node {
     return this.parseExpr();
   }
 
