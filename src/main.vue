@@ -8,7 +8,7 @@
         Error: {{item.result.text[0]}}
       </div>
       <div v-else>
-        <div v-for="tok in item.result.text">
+        <div v-for="tok of item.result.text">
           {{tok}}
           <br/>
         </div>

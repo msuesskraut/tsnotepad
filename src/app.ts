@@ -25,6 +25,9 @@ class SuccessResult implements Result {
 
 export function evaluate(command: string): Result {
   try {
+    if (command.length === 0) {
+      return new SuccessResult([]);
+    }
     const toks = tokenize(command);
     let p = new Parser(toks);
     const ast = p.parse();
