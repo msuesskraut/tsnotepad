@@ -1,4 +1,4 @@
-import { Token } from "./tokenizer";
+import { Token, TokenKind } from "./tokenizer";
 
 export abstract class Visitor<T> {
   abstract visitNumber(n: Number): T;
@@ -26,10 +26,10 @@ export class Number extends Node {
 }
 
 export class UnOp extends Node {
-  readonly op: string;
+  readonly op: TokenKind;
   constructor(token: Token, public readonly expr: Node) {
     super(token);
-    this.op = token.value as string;
+    this.op = token.kind;
   }
 
   accept<T>(v: Visitor<T>): T {
@@ -38,14 +38,14 @@ export class UnOp extends Node {
 }
 
 export class BinOp extends Node {
-  readonly op: string;
+  readonly op: TokenKind;
   constructor(
     token: Token,
     public readonly left: Node,
     public readonly right: Node
   ) {
     super(token);
-    this.op = token.value as string;
+    this.op = token.kind;
   }
 
   accept<T>(v: Visitor<T>): T {

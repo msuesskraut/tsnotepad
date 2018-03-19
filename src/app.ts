@@ -1,6 +1,6 @@
 import { tokenize, TokenError } from "./tokenizer";
 import { Parser, ParserError } from "./parser";
-import { print } from "./ast_printer";
+import { interpret } from "./interpreter";
 
 interface Result {
   readonly isError: boolean;
@@ -28,7 +28,7 @@ export function evaluate(command: string): Result {
     const toks = tokenize(command);
     let p = new Parser(toks);
     const ast = p.parse();
-    return new SuccessResult([print(ast)]);
+    return new SuccessResult([`res = ${interpret(ast)}`]);
   } catch (te) {
     console.log(te);
     console.log(typeof te);
