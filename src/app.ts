@@ -1,12 +1,10 @@
-import { Tokenizer, Token, TokenKind } from "./tokenizer";
+import { tokenize } from "./tokenizer";
+import { Parser } from "./parser";
+import { print } from "./ast_printer";
 
-export function evaluate(command: string) {
-  let t = new Tokenizer(command);
-  let toks = [];
-  do {
-    toks.push(t.GetNextToken());
-  } while (toks[toks.length - 1].kind != TokenKind.EOF);
-  return toks.map(tok => {
-    return tok.toString();
-  });
+export function evaluate(command: string): Array<string> {
+  const toks = tokenize(command);
+  let p = new Parser(toks);
+  const ast = p.parse();
+  return [print(ast)];
 }

@@ -1,5 +1,5 @@
 import { Token, TokenKind, TokenLocation } from "./tokenizer";
-import { ASTNode, Number, UnOp, BinOp } from "./ast";
+import * as ast from "./ast";
 
 export class ParserError {
   constructor(
@@ -60,9 +60,9 @@ export class Parser {
     throw new ParserError(this.peek().location, msg);
   }
 
-  private parseTerminal(): ASTNode {
+  private parseTerminal(): ast.Node {
     if (this.match([TokenKind.Number])) {
-      return new Number(this.previous());
+      return new ast.Number(this.previous());
     }
 
     if (this.match([TokenKind.ParensOpen])) {
@@ -78,47 +78,47 @@ export class Parser {
     );
   }
 
-  private parseUnary(): ASTNode {
+  private parseUnary(): ast.Node {
     if (this.match([TokenKind.Minus])) {
       const op = this.previous();
       let right = this.parseUnary();
-      return new UnOp(op, right);
+      return new ast.UnOp(op, right);
     }
 
     return this.parseTerminal();
   }
 
-  private parseMul(): ASTNode {
+  private parseMul(): ast.Node {
     let expr = this.parseUnary();
 
     while (this.match([TokenKind.Times, TokenKind.Divide, TokenKind.Rem])) {
       const op = this.previous();
       const right = this.parseUnary();
 
-      expr = new BinOp(op, expr, right);
+      expr = new ast.BinOp(op, expr, right);
     }
 
     return expr;
   }
 
-  private parseAdd(): ASTNode {
+  private parseAdd(): ast.Node {
     let expr = this.parseMul();
 
     while (this.match([TokenKind.Plus, TokenKind.Minus])) {
       const op = this.previous();
       const right = this.parseMul();
 
-      expr = new BinOp(op, expr, right);
+      expr = new ast.BinOp(op, expr, right);
     }
 
     return expr;
   }
 
-  private parseExpr(): ASTNode {
+  private parseExpr(): ast.Node {
     return this.parseAdd();
   }
 
-  parse(): ASTNode {
+  parse(): ast.Node {
     return this.parseExpr();
   }
 }
