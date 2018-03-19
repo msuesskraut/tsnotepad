@@ -1,5 +1,5 @@
-import { Parser, ParserError } from "../../src/parser";
-import * as ast from "../../src/ast";
+import { Parser, ParserError } from "../../src/lang/parser";
+import * as ast from "../../src/lang/ast";
 import * as tok from "../helpers/token";
 
 describe("Parser", () => {

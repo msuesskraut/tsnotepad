@@ -1,4 +1,4 @@
-import * as ast from "../../src/ast";
+import * as ast from "../../src/lang/ast";
 import * as tok from "../helpers/token";
 
 describe("ast.Vistor", () => {

@@ -1,6 +1,6 @@
-import { Token, TokenKind, TokenLocation } from "../../src/tokenizer";
+import { Token, TokenKind, TokenLocation } from "../../src/lang/tokenizer";
 
-export { TokenKind } from "../../src/tokenizer";
+export { TokenKind } from "../../src/lang/tokenizer";
 
 export function tok(tk: TokenKind, val: any): Token {
   return new Token(tk, `${val}`, val, new TokenLocation(0));

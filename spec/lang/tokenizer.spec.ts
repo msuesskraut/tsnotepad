@@ -5,7 +5,7 @@ import {
   Token,
   Tokenizer,
   tokenize
-} from "../../src/tokenizer";
+} from "../../src/lang/tokenizer";
 
 describe("TokenLocation", function() {
   const loc = new TokenLocation(42);
