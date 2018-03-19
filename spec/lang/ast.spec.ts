@@ -1,5 +1,6 @@
 import * as ast from "../../src/lang/ast";
 import * as tok from "../helpers/token";
+import * as hast from "../helpers/ast";
 
 describe("ast.Vistor", () => {
   class DummyVisitor extends ast.Visitor<void> {
@@ -8,9 +9,9 @@ describe("ast.Vistor", () => {
     visitBinOp(op: ast.BinOp) {}
   }
 
-  const num1 = new ast.Number(tok.num(23));
-  const num2 = new ast.Number(tok.num(12));
-  const num3 = new ast.Number(tok.num(34));
+  const num1 = hast.num(23);
+  const num2 = hast.num(12);
+  const num3 = hast.num(34);
 
   it("should visit numbers", () => {
     let v = new DummyVisitor();

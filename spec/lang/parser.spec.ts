@@ -1,10 +1,11 @@
 import { Parser, ParserError } from "../../src/lang/parser";
 import * as ast from "../../src/lang/ast";
 import * as tok from "../helpers/token";
+import * as hast from "../helpers/ast";
 
 describe("Parser", () => {
   const tnum1 = tok.num(12);
-  const anum1 = new ast.Number(tnum1);
+  const anum1 = hast.num(12);
 
   it("should parse numbers", () => {
     let p = new Parser([tnum1, tok.EOF]);
@@ -19,7 +20,7 @@ describe("Parser", () => {
   });
 
   const tnum2 = tok.num(32);
-  const anum2 = new ast.Number(tnum2);
+  const anum2 = hast.num(32);
 
   it("should parse binops", () => {
     let p = new Parser([tnum2, minus, tnum1, tok.EOF]);
@@ -35,7 +36,7 @@ describe("Parser", () => {
 
   const times = tok.tok(tok.TokenKind.Times, "*");
   const tnum3 = tok.num(34);
-  const anum3 = new ast.Number(tnum3);
+  const anum3 = hast.num(34);
 
   it("should respect operator preference in a - b * c", () => {
     // a - b * c
