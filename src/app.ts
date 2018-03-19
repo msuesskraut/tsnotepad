@@ -25,12 +25,13 @@ class SuccessResult implements Result {
 
 export function evaluate(command: string): Result {
   try {
+    command = command.trim();
     if (command.length === 0) {
       return new SuccessResult([]);
     }
     const toks = tokenize(command);
     let p = new Parser(toks);
-    const ast = p.parse();
+    const ast = p.parseFully();
     return new SuccessResult([`res = ${interpret(ast)}`]);
   } catch (te) {
     console.log(te);

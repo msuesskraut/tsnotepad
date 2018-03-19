@@ -125,4 +125,15 @@ export class Parser {
   parse(): ast.Node {
     return this.parseExpr();
   }
+
+  parseFully(): ast.Node {
+    const res = this.parse();
+    if (this.peek().kind != TokenKind.EOF) {
+      throw new ParserError(
+        this.peek().location,
+        `Unexpected token ${TokenKind[this.peek().kind]} expected EOF`
+      );
+    }
+    return res;
+  }
 }
