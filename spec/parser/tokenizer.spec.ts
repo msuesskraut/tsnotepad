@@ -3,7 +3,8 @@ import {
   TokenError,
   TokenKind,
   Token,
-  Tokenizer
+  Tokenizer,
+  tokenize
 } from "../../src/tokenizer";
 
 describe("TokenLocation", function() {
@@ -143,5 +144,40 @@ describe("Tokenizer", function() {
     let t = new Tokenizer(")");
     const tok = t.GetNextToken();
     expect(tok.kind).toEqual(TokenKind.ParensClose);
+  });
+});
+
+describe("tokenize", () => {
+  it("should lex all token in string", () => {
+    const toks = tokenize("2+3");
+    expect(toks).toEqual([
+      new Token(TokenKind.Number, "2", 2, new TokenLocation(0)),
+      new Token(TokenKind.Plus, "+", "+", new TokenLocation(1)),
+      new Token(TokenKind.Number, "3", 3, new TokenLocation(2)),
+      new Token(TokenKind.EOF, "", "", new TokenLocation(3))
+    ]);
+  });
+
+  it("should lex by default without whitespace", () => {
+    const toks = tokenize("  2\n\t+3   ");
+    expect(toks).toEqual([
+      new Token(TokenKind.Number, "2", 2, new TokenLocation(2)),
+      new Token(TokenKind.Plus, "+", "+", new TokenLocation(5)),
+      new Token(TokenKind.Number, "3", 3, new TokenLocation(6)),
+      new Token(TokenKind.EOF, "", "", new TokenLocation(10))
+    ]);
+  });
+
+  it("should lex optionally with whitespace", () => {
+    const toks = tokenize("  2\n\t+3   ", false);
+    expect(toks).toEqual([
+      new Token(TokenKind.Whitespace, "  ", "  ", new TokenLocation(0)),
+      new Token(TokenKind.Number, "2", 2, new TokenLocation(2)),
+      new Token(TokenKind.Whitespace, "\n\t", "\n\t", new TokenLocation(3)),
+      new Token(TokenKind.Plus, "+", "+", new TokenLocation(5)),
+      new Token(TokenKind.Number, "3", 3, new TokenLocation(6)),
+      new Token(TokenKind.Whitespace, "   ", "   ", new TokenLocation(7)),
+      new Token(TokenKind.EOF, "", "", new TokenLocation(10))
+    ]);
   });
 });

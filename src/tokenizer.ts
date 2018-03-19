@@ -131,3 +131,12 @@ export class Tokenizer {
     );
   }
 }
+
+export function tokenize(s: string, skipWhitespace = true): Array<Token> {
+  let t = new Tokenizer(s, skipWhitespace);
+  let toks = [];
+  do {
+    toks.push(t.GetNextToken());
+  } while (toks[toks.length - 1].kind != TokenKind.EOF);
+  return toks;
+}
