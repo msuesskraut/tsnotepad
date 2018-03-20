@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { evaluate } from "./eval";
+import { evaluate } from "../lang/repl";
 export default {
   name: "repl",
   data() {

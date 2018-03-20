@@ -1,6 +1,6 @@
-import { tokenize, TokenError } from "../lang/tokenizer";
-import { Parser, ParserError } from "../lang/parser";
-import { interpret } from "../lang/interpreter";
+import { tokenize, TokenError } from "./tokenizer";
+import { Parser, ParserError } from "./parser";
+import { interpret } from "./interpreter";
 
 interface Result {
   readonly isError: boolean;
@@ -34,8 +34,6 @@ export function evaluate(command: string): Result {
     const ast = p.parseFully();
     return new SuccessResult([`res = ${interpret(ast)}`]);
   } catch (te) {
-    console.log(te);
-    console.log(typeof te);
     return new ErrorResult(te.toString());
   }
 }
