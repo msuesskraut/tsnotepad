@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+
+<body>
+  <div id="repl"></div>
+</body>
+
+<script lang="ts">
+  import Vue from 'vue';
+  import Repl from './repl';
+  import { evaluate } from './eval';
+
+  const app = new Vue(Repl).$mount('#repl');
+</script>
+
+</html>

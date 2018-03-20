@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h2>Welcome in {{title}}</h2>
     <div v-for="item in contents" :key="item.id">
       <span class="prompt">{{prompt}}</span>
       <input class="used" type="text" v-bind:value="item.command" readonly />
@@ -22,12 +21,11 @@
 </template>
 
 <script>
-import { evaluate } from "./app";
+import { evaluate } from "./eval";
 export default {
-  name: "test",
+  name: "repl",
   data() {
     return {
-      title: "",
       prompt: ">>",
       command: "",
       contents: [],
@@ -47,3 +45,15 @@ export default {
   }
 };
 </script>
+
+<style>
+input.used {
+  border-width: 0;
+}
+input.current {
+  border-width: 0;
+}
+div.error {
+  color: red;
+}
+</style>

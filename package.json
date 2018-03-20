@@ -18,9 +18,16 @@
   "config": {
     "forge": {
       "make_targets": {
-        "win32": ["squirrel"],
-        "darwin": ["zip"],
-        "linux": ["deb", "rpm"]
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
       },
       "electronPackagerConfig": {
         "packageManager": "npm"
@@ -55,6 +62,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.1.1",
-    "electron-prebuilt-compile": "1.8.2"
+    "electron-prebuilt-compile": "1.8.2",
+    "vueify": "^9.4.1"
   }
 }

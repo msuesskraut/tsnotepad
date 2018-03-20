@@ -1,6 +1,6 @@
-import { tokenize, TokenError } from "./lang/tokenizer";
-import { Parser, ParserError } from "./lang/parser";
-import { interpret } from "./lang/interpreter";
+import { tokenize, TokenError } from "../lang/tokenizer";
+import { Parser, ParserError } from "../lang/parser";
+import { interpret } from "../lang/interpreter";
 
 interface Result {
   readonly isError: boolean;
