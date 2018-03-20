@@ -25,7 +25,7 @@ export class TokenError {
     public readonly location: TokenLocation
   ) {}
 
-  GetFullErrorMessage(): string {
+  toString(): string {
     return `Error at ${this.location.offset}: ${this.message}`;
   }
 }

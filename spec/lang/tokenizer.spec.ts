@@ -19,7 +19,7 @@ describe("TokenLocation", function() {
 
 describe("TokenError", function() {
   const err = new TokenError("myError", new TokenLocation(19));
-  const msg = err.GetFullErrorMessage();
+  const msg = err.toString();
 
   it("Full message should contain the error location", function() {
     expect(msg).toContain("19");
