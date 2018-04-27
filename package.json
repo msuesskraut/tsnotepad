@@ -48,7 +48,7 @@
     }
   },
   "dependencies": {
-    "@types/electron-devtools-installer": "^2.0.2",
+    "@types/electron-devtools-installer": "^2.0.3",
     "@types/jasmine": "^2.8.6",
     "@types/tmp": "0.0.33",
     "electron-compile": "^6.4.2",
@@ -56,14 +56,15 @@
     "electron-squirrel-startup": "^1.0.0",
     "jasmine": "^3.1.0",
     "jasmine-ts": "^0.2.1",
+    "npm": "^6.0.0",
     "tmp": "0.0.33",
-    "vue": "^2.5.14"
+    "vue": "^2.5.16"
   },
   "devDependencies": {
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
-    "electron-forge": "^5.1.1",
+    "electron-forge": "^5.2.0",
     "electron-prebuilt-compile": "1.8.2",
     "vueify": "^9.4.1"
   }
